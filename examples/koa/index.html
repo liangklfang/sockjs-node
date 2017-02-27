@@ -3,6 +3,9 @@
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"></script>
     <style>
+     html{
+      border:1px solid red;
+     }
       .box {
           width: 300px;
           float: left;
@@ -43,6 +46,7 @@
     <script>
         var sockjs_url = '/echo';
         var sockjs = new SockJS(sockjs_url);
+        //这里的sockjs_url要和服务器一致,否则服务器接受不到。而且客户端也要加入socket.js的源文件才能使用socketjs的API
         $('#first input').focus();
 
         var div  = $('#first div');
@@ -57,12 +61,15 @@
         };
 
         sockjs.onopen    = function()  {print('[*] open', sockjs.protocol);};
-        sockjs.onmessage = function(e) {print('[.] message', e.data);};
+        sockjs.onmessage = function(e) {print('客户端收到内容', e.data);};
+        //接收到服务器的消息
         sockjs.onclose   = function()  {print('[*] close');};
+        //服务器关闭
 
         form.submit(function() {
             print('[ ] sending', inp.val());
             sockjs.send(inp.val());
+            //发送消息到服务器
             inp.val('');
             return false;
         });
